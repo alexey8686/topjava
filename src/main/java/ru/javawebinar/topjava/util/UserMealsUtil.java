@@ -26,7 +26,6 @@ public class UserMealsUtil {
         getFilteredWithExceeded(mealList, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
 //        .toLocalDate();
 //        .toLocalTime();
-        getFilteredWithStream(mealList, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
     }
 
     public static List<UserMealWithExceed> getFilteredWithExceeded(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
@@ -47,12 +46,11 @@ public class UserMealsUtil {
         return userMealWithExceeds;
     }
 
-    //optional
     public static List<UserMealWithExceed> getFilteredWithStream(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
 
         Map<LocalDate, Integer> map = mealList
                 .stream()
-                .collect(Collectors.toMap(t -> t.getLocalDate(), UserMeal::getCalories, (a, b) -> a + b));
+                .collect(Collectors.toMap(UserMeal::getLocalDate, UserMeal::getCalories, (a, b) -> a + b));
 
         return mealList
                 .stream()
