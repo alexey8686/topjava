@@ -7,7 +7,6 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
 <head>
@@ -27,6 +26,13 @@
     <h2>Meal of user</h2>
 </div>
 <div>
+    <h3><a href="index.html">Home</a></h3>
+</div>
+<div>
+    <button type="button" ><a href="meals?action=create">Добавить</a></button>
+</div>
+<br>
+<div>
     <table cellspacing="2" border="1" cellpadding="5">
         <tr>
             <td>Время</td>
@@ -41,16 +47,12 @@
                 <td>${fn:replace(meals.dateTime, 'T', ' ')}</td>
                 <td>${meals.description}</td>
                 <td>${meals.calories}</td>
+                <td><a href="meals?action=update&id=${meals.id}">Изменить</a></td>
+                <td><a href="meals?action=delete&id=${meals.id}">Удалить</a></td>
             </tr>
         </c:forEach>
 
     </table>
 </div>
-
-<div>
-    <p><c:out value="${meals}"></c:out></p>
-</div>
-
-
 </body>
 </html>

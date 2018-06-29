@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.web;
 
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.MealWithExceed;
+import ru.javawebinar.topjava.repositoriy.InMemoryMealRepo;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import javax.servlet.ServletException;
@@ -10,36 +11,60 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.Month;
-import java.util.Arrays;
+import java.time.LocalTime;
 import java.util.List;
 
 public class MealServlet extends HttpServlet {
 
-    private List<Meal> meals;
     private List<MealWithExceed> mealsWithExceeded;
+    private InMemoryMealRepo memoryMealRepo;
+
     @Override
     public void init() throws ServletException {
-        meals = Arrays.asList(
-                new Meal(LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500),
-                new Meal(LocalDateTime.of(2015, Month.MAY, 30, 13, 0), "Обед", 1000),
-                new Meal(LocalDateTime.of(2015, Month.MAY, 30, 20, 0), "Ужин", 500),
-                new Meal(LocalDateTime.of(2015, Month.MAY, 31, 10, 0), "Завтрак", 1000),
-                new Meal(LocalDateTime.of(2015, Month.MAY, 31, 13, 0), "Обед", 500),
-                new Meal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510)
-        );
-
-        mealsWithExceeded = MealsUtil.getWithExceeded(meals, 2000);
+        memoryMealRepo = new InMemoryMealRepo();
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute("meals",mealsWithExceeded);
-        request.getRequestDispatcher("/meals.jsp").forward(request,response);
+        String action = request.getParameter("action");
+        String id = request.getParameter("id");
+
+        switch (action == null ? "all" : action) {
+            case "all":
+                request.setAttribute("meals", MealsUtil.getFilteredWithExceeded(memoryMealRepo.getAll()
+                        , LocalTime.MIN,LocalTime.MAX, 2000));
+                forwardTo("/meals.jsp", request, response);
+                break;
+            case "update":
+                request.setAttribute("meal", memoryMealRepo.get(Integer.valueOf(id)));
+                forwardTo("/mealsFormEdit.jsp", request, response);
+                break;
+            case "create":
+                request.setAttribute("meal", new Meal());
+                forwardTo("/mealsFormEdit.jsp", request, response);
+                break;
+            case "delete":
+                memoryMealRepo.delete(Integer.valueOf(id));
+                response.sendRedirect("meals");
+                break;
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        String action = request.getParameter("save");
+        String id = request.getParameter("id");
+        if (action.equals("save")) {
+            memoryMealRepo.save(new Meal(id.isEmpty() ? null : Integer.valueOf(id)
+                    , LocalDateTime.parse(request.getParameter("dateTime"))
+                    , request.getParameter("description")
+                    , Integer.valueOf(request.getParameter("calories"))));
+        }
+        response.sendRedirect("meals");
+    }
 
+    public void forwardTo(String jsp, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getRequestDispatcher(jsp).forward(request, response);
     }
 }
