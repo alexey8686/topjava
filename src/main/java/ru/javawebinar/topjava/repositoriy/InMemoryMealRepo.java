@@ -4,6 +4,7 @@ import ru.javawebinar.topjava.model.Meal;
 
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -11,8 +12,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class InMemoryMealRepo implements MealRepositoriyInterface {
-    Map<Integer, Meal> mealMap = new ConcurrentHashMap<>();
-    AtomicInteger atomicId = new AtomicInteger(0);
+    private Map<Integer, Meal> mealMap = new ConcurrentHashMap<>();
+    private AtomicInteger atomicId = new AtomicInteger(0);
 
     public InMemoryMealRepo() {
         mealMap.put(atomicId.incrementAndGet(), new Meal(atomicId.get(), LocalDateTime.of(2015, Month.MAY, 30, 10, 0), "Завтрак", 500));
@@ -25,7 +26,7 @@ public class InMemoryMealRepo implements MealRepositoriyInterface {
 
     @Override
     public List<Meal> getAll() {
-        return mealMap.values().stream().collect(Collectors.toList());
+        return new ArrayList<>(mealMap.values());
     }
 
     @Override
@@ -42,8 +43,9 @@ public class InMemoryMealRepo implements MealRepositoriyInterface {
     @Override
     public Meal save(Meal meal) {
         if (meal.isNew(meal.getId())) {
-            mealMap.put(atomicId.incrementAndGet(), new Meal(atomicId.get(), meal.getDateTime(), meal.getDescription(), meal.getCalories()));
-            meal.setId(atomicId.get());
+            meal.setId(atomicId.incrementAndGet());
+            mealMap.put(atomicId.get(), meal);
+
         } else {
             mealMap.put(meal.getId(), meal);
         }
