@@ -5,6 +5,7 @@ import ru.javawebinar.topjava.model.Meal;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -42,13 +43,12 @@ public class InMemoryMealRepo implements MealRepositoriyInterface {
 
     @Override
     public Meal save(Meal meal) {
-        if (meal.isNew(meal.getId())) {
+        if (meal.isNew()) {
             meal.setId(atomicId.incrementAndGet());
-            mealMap.put(atomicId.get(), meal);
-
-        } else {
             mealMap.put(meal.getId(), meal);
+            return meal;
         }
-        return meal;
+
+         return   mealMap.computeIfPresent(meal.getId(),(id,meals)->meal);
     }
 }

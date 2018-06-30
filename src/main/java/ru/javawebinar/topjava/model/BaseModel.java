@@ -18,7 +18,7 @@ public abstract class BaseModel {
         this.id = id;
     }
 
-    public boolean isNew(Integer id) {
+    public boolean isNew() {
         return this.id == null;
     }
 }
