@@ -23,6 +23,7 @@ public class MealServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         memoryMealRepo = new InMemoryMealRepo();
+        memoryMealRepo.mealMapInitialisation();
     }
 
     @Override
@@ -31,24 +32,24 @@ public class MealServlet extends HttpServlet {
 
         switch (action == null ? "all" : action) {
             case "all":
+                LOG.info("give all meal");
                 request.setAttribute("meals", MealsUtil.getFilteredWithExceeded(memoryMealRepo.getAll(),
                         LocalTime.MIN, LocalTime.MAX, 2000));
-                LOG.info("give all meal");
                 forwardTo("/meals.jsp", request, response);
                 break;
             case "update":
-                request.setAttribute("meal", memoryMealRepo.get(Integer.valueOf(request.getParameter("id"))));
                 LOG.info("update meal");
+                request.setAttribute("meal", memoryMealRepo.get(Integer.valueOf(request.getParameter("id"))));
                 forwardTo("/mealsFormEdit.jsp", request, response);
                 break;
             case "create":
-                request.setAttribute("meal", new Meal());
                 LOG.info("create meal");
+                request.setAttribute("meal", new Meal());
                 forwardTo("/mealsFormEdit.jsp", request, response);
                 break;
             case "delete":
-                memoryMealRepo.delete(Integer.valueOf(request.getParameter("id")));
                 LOG.info("delete meal");
+                memoryMealRepo.delete(Integer.valueOf(request.getParameter("id")));
                 response.sendRedirect("meals");
                 break;
         }
@@ -58,12 +59,11 @@ public class MealServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         String id = request.getParameter("id");
+        LOG.info("save");
         memoryMealRepo.save(new Meal(id.isEmpty() ? null : Integer.valueOf(id),
                 LocalDateTime.parse(request.getParameter("dateTime")),
                 request.getParameter("description"),
                 Integer.valueOf(request.getParameter("calories"))));
-        LOG.info("save");
-
         response.sendRedirect("meals");
     }
 

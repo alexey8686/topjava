@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class Meal extends BaseModel {
+
     private LocalDateTime dateTime;
 
     private String description;
@@ -18,6 +19,7 @@ public class Meal extends BaseModel {
     public Meal(LocalDateTime dateTime, String description, int calories) {
       this(null,dateTime,description,calories);
     }
+
     public Meal(Integer id, LocalDateTime dateTime, String description, int calories) {
         super(id);
         this.dateTime = dateTime;
