@@ -8,13 +8,15 @@ import java.util.Collection;
 public interface MealService {
 
 
-    Meal create (int userId, Meal meal);
+    Meal create(int userId, Meal meal);
 
-    void update(int userId,Meal meal);
+    void update(int userId, Meal meal);
 
     void delete(int userId, int id) throws NotFoundException;
 
     Meal get(int userId, int id) throws NotFoundException;
 
     Collection<Meal> getAll(int userId);
+
+    Collection<Meal> getFiltered(int userId, String startDate, String endDate);
 }

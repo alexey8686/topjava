@@ -34,4 +34,9 @@ public class MealRestController extends AbstractMealController {
     public Meal get(int userId, int id) {
         return super.get(userId, id);
     }
+
+    @Override
+    public List<MealWithExceed> getFiltered(String startDate, String startTime, String endDate, String endTime) {
+        return super.getFiltered(startDate, startTime, endDate, endTime);
+    }
 }

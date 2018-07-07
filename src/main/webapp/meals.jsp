@@ -14,12 +14,49 @@
         .exceeded {
             color: red;
         }
+
+        .field {clear:both; text-align:right; line-height:25px;}
+        label {float:left;}
+
+
+
     </style>
 </head>
 <body>
 <section>
     <h3><a href="index.html">Home</a></h3>
     <h2>Meals</h2>
+    <br>
+    <div >
+        <form method="post" action="meals">
+            <div >
+                <div class="field">
+                    <label>From Date:</label>
+                    <input type="date" name="fromDate">
+                </div>
+                <br>
+                <div class="field">
+                    <label>To Date:</label>
+                    <input  type="date" name="toDate">
+                </div>
+                <br>
+                <div class="field">
+                    <label>From Time:</label>
+                    <input type="time" name="fromTime">
+                </div>
+                <br>
+                <div class="field">
+                    <label>To Time:</label>
+                    <input  type="time" name="toTime">
+                </div>
+                <br>
+                <div class="field">
+                <input  type="submit" name="Find" value="Find">
+                </div>
+            </div>
+        </form>
+<br>
+    </div>
     <a href="meals?action=create">Add Meal</a>
     <hr/>
     <table border="1" cellpadding="8" cellspacing="0">
@@ -49,5 +86,7 @@
         </c:forEach>
     </table>
 </section>
+
+
 </body>
 </html>

@@ -4,9 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealWithExceed;
+import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static ru.javawebinar.topjava.web.SecurityUtil.authUserCaloriesPerDay;
+import static ru.javawebinar.topjava.web.SecurityUtil.getAuthUserId;
 
 public abstract class AbstractMealController {
     @Autowired
@@ -32,4 +37,14 @@ public abstract class AbstractMealController {
         return service.get(userId, id);
     }
 
+    public List<MealWithExceed> getFiltered(String startDate, String startTime, String endDate, String endTime) {
+        return MealsUtil.getWithExceeded(service.getFiltered(getAuthUserId(), startDate, endDate), authUserCaloriesPerDay()).
+                stream().
+                filter(f -> DateTimeUtil.isBetweenTime(f.getDateTime().toLocalTime(), startTime, endTime)).
+                collect(Collectors.toList());
+
+
+    }
 }
+
+
