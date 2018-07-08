@@ -10,7 +10,9 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Repository
 public class InMemoryMealRepositoryImpl implements MealRepository {
@@ -37,7 +39,7 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
             return meal;
         }
         // treat case: update, but absent in storage
-        if (meal.getUserId() == userId)
+        if (repository.get(meal.getId()).getUserId() == userId)
             return repository.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
         else
             return null;
@@ -61,22 +63,24 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     @Override
     public List<Meal> getAll(int userId) {
-        return repository.values()
-                .stream()
-                .filter(m -> m.getUserId() == userId)
+        return getAllCommon(userId)
                 .sorted(Comparator.comparing(Meal::getDateTime).reversed()).
                         collect(Collectors.toList());
     }
 
     @Override
     public List<Meal> getFiltered(int userId, LocalDate startDate, LocalDate endDate) {
-        return repository
-                .values()
-                .stream()
-                .filter(u -> u.getUserId() == userId)
+
+        return getAllCommon(userId)
                 .filter(d -> DateTimeUtil.isBetweenDate(d.getDate(), startDate, endDate))
                 .sorted(Comparator.comparing(Meal::getDateTime))
                 .collect(Collectors.toList());
     }
+
+    public Stream<Meal> getAllCommon(int userId){
+        return repository.values().stream().filter(m -> m.getUserId() == userId);
+    }
+
+
 }
 

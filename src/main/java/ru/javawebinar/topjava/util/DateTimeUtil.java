@@ -10,7 +10,7 @@ public class DateTimeUtil {
 
     public static boolean isBetweenDate(LocalDate ld, LocalDate startDate, LocalDate endDate) {
         if (startDate == null)
-            startDate = LocalDate.of(1900, 0, 0);
+            startDate = LocalDate.of(1900, 1, 1);
 
         if (endDate == null)
             endDate = LocalDate.of(2100, 12, 31);
