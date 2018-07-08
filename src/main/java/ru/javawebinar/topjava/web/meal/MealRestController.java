@@ -10,7 +10,7 @@ import java.util.List;
 @Controller
 public class MealRestController extends AbstractMealController {
 
-    @Override
+ /*   @Override
     public List<MealWithExceed> getAll(int userId, int caloriesPerDay) {
         return super.getAll(userId, caloriesPerDay);
     }
@@ -38,5 +38,5 @@ public class MealRestController extends AbstractMealController {
     @Override
     public List<MealWithExceed> getFiltered(String startDate, String startTime, String endDate, String endTime) {
         return super.getFiltered(startDate, startTime, endDate, endTime);
-    }
+    }*/
 }

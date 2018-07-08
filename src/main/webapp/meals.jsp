@@ -28,7 +28,7 @@
     <h2>Meals</h2>
     <br>
     <div >
-        <form method="post" action="meals">
+        <form method="post" action="meals?action=filter">
             <div >
                 <div class="field">
                     <label>From Date:</label>

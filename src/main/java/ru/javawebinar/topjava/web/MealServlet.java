@@ -13,12 +13,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
+import static ru.javawebinar.topjava.util.DateTimeUtil.checkLocalDate;
+import static ru.javawebinar.topjava.util.DateTimeUtil.checkLocalTime;
 import static ru.javawebinar.topjava.web.SecurityUtil.*;
 
 public class MealServlet extends HttpServlet {
@@ -45,32 +45,33 @@ public class MealServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        if (request.getParameter("Find").equals("Find")) {
-
-            request.setAttribute("meals", controller.getFiltered(
-                    request.getParameter("fromDate"),
-                    request.getParameter("fromTime"),
-                    request.getParameter("toDate"),
-                    request.getParameter("toTime")));
-            request.getRequestDispatcher("/meals.jsp").forward(request, response);
-        } else {
+        String action = request.getParameter("action");
+        if(action==null){
             String id = request.getParameter("id");
 
 
-            Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
-                    getAuthUserId(),
+            Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),getAuthUserId(),
                     LocalDateTime.parse(request.getParameter("dateTime")),
                     request.getParameter("description"),
                     Integer.parseInt(request.getParameter("calories")));
 
             log.info(meal.isNew() ? "Create {}" : "Update {}", meal);
             if (meal.isNew())
-                controller.create(getAuthUserId(), meal);
+                controller.create( meal);
             else
-                controller.update(getAuthUserId(), meal);
+                controller.update( meal);
 
             response.sendRedirect("meals");
         }
+        else if("filter".equals(action)){
+            request.setAttribute("meals", controller.getFiltered(checkLocalDate(request.getParameter("fromDate")),
+                    checkLocalTime(request.getParameter("fromTime")),
+                    checkLocalDate(request.getParameter("toDate")),
+                    checkLocalTime(request.getParameter("toTime"))));
+
+            request.getRequestDispatcher("/meals.jsp").forward(request, response);
+        }
+
     }
 
     @Override
@@ -81,14 +82,14 @@ public class MealServlet extends HttpServlet {
             case "delete":
                 int id = getId(request);
                 log.info("Delete {}", id);
-                controller.delete(getAuthUserId(), id);
+                controller.delete(id);
                 response.sendRedirect("meals");
                 break;
             case "create":
             case "update":
                 final Meal meal = "create".equals(action) ?
                         new Meal(getAuthUserId(), LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000) :
-                        controller.get(getAuthUserId(), getId(request));
+                        controller.get(getId(request));
                 request.setAttribute("meal", meal);
                 request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
                 break;

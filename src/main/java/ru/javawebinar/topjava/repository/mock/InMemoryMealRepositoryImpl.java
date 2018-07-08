@@ -5,8 +5,8 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
-import ru.javawebinar.topjava.util.exception.NotFoundException;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -14,16 +14,24 @@ import java.util.stream.Collectors;
 
 @Repository
 public class InMemoryMealRepositoryImpl implements MealRepository {
+
+
     private Map<Integer, Meal> repository = new ConcurrentHashMap<>();
     private AtomicInteger counter = new AtomicInteger(0);
 
     {
-        MealsUtil.MEALS.forEach(this::save);
+        MealsUtil.MEALS.stream().map(meal -> {
+            if (meal.isNew()) {
+                meal.setId(counter.incrementAndGet());
+                repository.put(meal.getId(), meal);
+            }
+            return meal;
+        }).collect(Collectors.toList());
     }
 
     @Override
     public Meal save(int userId, Meal meal) {
-        if (meal.isNew()) {
+        if (meal.isNew() && meal.getUserId() == userId) {
             meal.setId(counter.incrementAndGet());
             repository.put(meal.getId(), meal);
             return meal;
@@ -32,31 +40,19 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
         if (meal.getUserId() == userId)
             return repository.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
         else
-            throw new NotFoundException("no item");
-    }
-
-    public Meal save(Meal meal) {
-        if (meal.isNew()) {
-            meal.setId(counter.incrementAndGet());
-            repository.put(meal.getId(), meal);
-            return meal;
-        }
-        // treat case: update, but absent in storage
-        return repository.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
+            return null;
     }
 
     @Override
     public boolean delete(int userId, int id) {
-        if (repository.get(id).getUserId() == userId) {
-            repository.remove(id);
-            return true;
-        } else
-            return false;
+        if (repository.get(id).getUserId() == userId)
+            return repository.remove(id) != null;
+        return false;
     }
 
     @Override
     public Meal get(int userId, int id) {
-        if (repository.get(id).getUserId() == userId)
+        if (repository.containsKey(id) && repository.get(id).getUserId() == userId)
             return repository.get(id);
         else
             return null;
@@ -64,18 +60,22 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    public Collection<Meal> getAll(int userId) {
-        return repository.values().stream().
-                filter(m -> m.getUserId() == userId).
-                sorted(Comparator.comparing(Meal::getDateTime).reversed()).
-                collect(Collectors.toList());
+    public List<Meal> getAll(int userId) {
+        return repository.values()
+                .stream()
+                .filter(m -> m.getUserId() == userId)
+                .sorted(Comparator.comparing(Meal::getDateTime).reversed()).
+                        collect(Collectors.toList());
     }
 
     @Override
-    public Collection<Meal> getFiltered(int userId, String startDate, String endDate) {
-        return repository.values().stream()
-                .filter(u -> u.getUserId() == userId).filter(d -> DateTimeUtil.isBetweenDate(d.getDate(), startDate, endDate))
-                .sorted((a, b) -> b.getDateTime().compareTo(a.getDateTime()))
+    public List<Meal> getFiltered(int userId, LocalDate startDate, LocalDate endDate) {
+        return repository
+                .values()
+                .stream()
+                .filter(u -> u.getUserId() == userId)
+                .filter(d -> DateTimeUtil.isBetweenDate(d.getDate(), startDate, endDate))
+                .sorted(Comparator.comparing(Meal::getDateTime))
                 .collect(Collectors.toList());
     }
 }
