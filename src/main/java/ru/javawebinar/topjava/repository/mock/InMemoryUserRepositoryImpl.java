@@ -3,6 +3,7 @@ package ru.javawebinar.topjava.repository.mock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
+import ru.javawebinar.topjava.model.AbstractBaseEntity;
 import ru.javawebinar.topjava.model.AbstractNamedEntity;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
@@ -20,7 +21,12 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
 
     static List<User> users = Arrays.asList(
             new User(1, "user", "user@mail.ru", "password", Role.ROLE_USER),
-            new User(2, "admin", "admin@mail.ru", "admin", Role.ROLE_ADMIN));
+            new User(2, "admin", "admin@mail.ru", "admin", Role.ROLE_ADMIN),
+            new User(3, "admin", "admin1@mail.ru", "admin1", Role.ROLE_ADMIN),
+            new User(4, "admin", "admin2@mail.ru", "admin2", Role.ROLE_ADMIN));
+
+
+
 
     private Map<Integer, User> repository = new ConcurrentHashMap<>();
     private AtomicInteger atomicInteger = new AtomicInteger(0);
@@ -60,7 +66,7 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
         return repository
                 .values()
                 .stream()
-                .sorted((a, b) -> a.getName().compareToIgnoreCase(b.getName()))
+                .sorted(Comparator.comparing(User::getName).thenComparing(User::getEmail))
                 .collect(Collectors.toList());
     }
 

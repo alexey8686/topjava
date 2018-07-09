@@ -33,7 +33,6 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
         Map<Integer,Meal> meals = repository.computeIfAbsent(userId, m -> new ConcurrentHashMap<Integer, Meal>(m));
         if (meal.isNew() ) {
             meal.setId(counter.incrementAndGet());
-            meal.setUserId(userId);
             meals.put(meal.getId(), meal);
             return meal;
         }
@@ -68,18 +67,15 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     @Override
     public List<Meal> getFiltered(int userId, LocalDate startDate, LocalDate endDate) {
-
         return getAllCommon(userId)
-                .filter(d -> DateTimeUtil.isBetweenDate(d.getDate(), startDate, endDate))
+                .filter(d -> DateTimeUtil.isBetween(d.getDate(), startDate, endDate))
                 .sorted(Comparator.comparing(Meal::getDateTime))
                 .collect(Collectors.toList());
     }
 
     public Stream<Meal> getAllCommon(int userId){
         Map<Integer,Meal> meals = repository.get(userId);
-        return meals.values().stream().filter(m -> m.getUserId() == userId);
+        return meals.values().stream();
     }
-
-
 }
 
