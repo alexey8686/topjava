@@ -57,8 +57,8 @@ public abstract class AbstractMealController {
 
         return MealsUtil.getFilteredWithExceeded(mealsDateFiltered,
                 authUserCaloriesPerDay(),
-                startTime,
-                endTime);
+                check(startTime,LocalTime.MIN),
+                check(endTime,LocalTime.MAX));
 
 
     }

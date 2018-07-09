@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -60,22 +61,22 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     @Override
     public List<Meal> getAll(int userId) {
-        return getAllCommon(userId)
-                .sorted(Comparator.comparing(Meal::getDateTime).reversed())
-                .collect(Collectors.toList());
+        return getAllCommon(userId,m->true);
     }
 
     @Override
     public List<Meal> getFiltered(int userId, LocalDate startDate, LocalDate endDate) {
-        return getAllCommon(userId)
-                .filter(d -> DateTimeUtil.isBetween(d.getDate(), startDate, endDate))
-                .sorted(Comparator.comparing(Meal::getDateTime))
-                .collect(Collectors.toList());
+        return getAllCommon(userId,d -> DateTimeUtil.isBetween(d.getDate(), startDate, endDate));
+
     }
 
-    public Stream<Meal> getAllCommon(int userId){
+    public List<Meal> getAllCommon(int userId, Predicate<Meal> predicate){
         Map<Integer,Meal> meals = repository.get(userId);
-        return meals.values().stream();
+        return meals.values()
+                .stream()
+                .filter(predicate)
+                .sorted(Comparator.comparing(Meal::getDateTime).reversed())
+                .collect(Collectors.toList());
     }
 }
 
