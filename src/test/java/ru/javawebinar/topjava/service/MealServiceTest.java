@@ -52,6 +52,10 @@ public class MealServiceTest {
     public void getNotFound() throws Exception {
         mealService.get(1,USER_ID);
     }
+    @Test(expected = NotFoundException.class)
+    public void getAlienMeal() throws Exception {
+        mealService.get(100010,USER_ID);
+    }
 
     @Test
     public void delete() {
@@ -65,6 +69,10 @@ public class MealServiceTest {
         mealService.delete(1,USER_ID);
     }
 
+    @Test(expected = NotFoundException.class)
+    public void deleteAlienMeal() throws Exception {
+        mealService.delete(100010,USER_ID);
+    }
 
 
     @Test
@@ -87,6 +95,13 @@ public class MealServiceTest {
         updated.setCalories(490);
         mealService.update(updated,USER_ID);
         assertMatch(mealService.get(updated.getId(),USER_ID),updated);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void updateAlianMeal() throws Exception {
+        Meal updated  = new Meal(MEAL9);
+        updated.setCalories(490);
+        mealService.update(updated,USER_ID);
     }
 
     @Test
