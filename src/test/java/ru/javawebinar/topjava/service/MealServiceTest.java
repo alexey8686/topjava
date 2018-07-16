@@ -8,7 +8,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
-import ru.javawebinar.topjava.MealTestData;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
@@ -96,7 +95,7 @@ public class MealServiceTest {
 
     @Test(expected = NotFoundException.class)
     public void updateAlianMeal() throws Exception {
-        Meal updated = new Meal(ALIAN_MEAL);
+        Meal updated = new Meal(ADMIN_MEAL3);
         updated.setCalories(490);
         mealService.update(updated, USER_ID);
     }
