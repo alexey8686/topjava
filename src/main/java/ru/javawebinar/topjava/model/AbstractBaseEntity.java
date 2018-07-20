@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.model;
 
 import javax.persistence.*;
+import javax.persistence.Id;
 
 @MappedSuperclass
 // http://stackoverflow.com/questions/594597/hibernate-annotations-which-is-better-field-or-property-access
