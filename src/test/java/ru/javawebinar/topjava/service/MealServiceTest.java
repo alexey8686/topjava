@@ -1,15 +1,12 @@
 package ru.javawebinar.topjava.service;
 
 import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.junit.rules.TestRule;
-import org.junit.rules.TestWatcher;
+import org.junit.rules.Stopwatch;
 import org.junit.runner.Description;
 import org.junit.runner.RunWith;
-import org.junit.runners.model.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
@@ -18,8 +15,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
-import ru.javawebinar.topjava.PerformanceLogger;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
@@ -44,6 +39,8 @@ public class MealServiceTest {
 
     private static final Logger log = LoggerFactory.getLogger(MealServiceTest.class);
 
+    private static final StringBuilder builder = new StringBuilder();
+
     @Autowired
     private MealService service;
 
@@ -51,22 +48,21 @@ public class MealServiceTest {
     public ExpectedException thrown = ExpectedException.none();
 
     @Rule
-    public PerformanceLogger performanceLogger = new PerformanceLogger();
+    public final Stopwatch stopwatch = new Stopwatch() {
+        protected void finished(long nanos, Description description) {
+            log.info(description.getMethodName() + " finished, time taken " + nanos + " milli sec");
+            builder.append(description.getMethodName() + " finished, time taken " + nanos + " milli sec");
+            builder.append("\n");
+        }
 
-    private static Long before;
-    private static Long after;
-
-    @BeforeClass
-    public static void beforeWatcher() {
-        before = System.currentTimeMillis();
-    }
+    };
 
     @AfterClass
     public static void afterWatcher() {
-        after = System.currentTimeMillis();
-        log.info("----------------------------------------------------------------------------");
-        log.info("General time of all tests: " + (after - before) + " milli sec.");
-        log.info("----------------------------------------------------------------------------");
+        log.info("\n----------------------------------------------------------------------------\n"
+                + "Test results:" + "\n"
+                + builder.toString()
+                + "\n----------------------------------------------------------------------------");
     }
 
     @Test

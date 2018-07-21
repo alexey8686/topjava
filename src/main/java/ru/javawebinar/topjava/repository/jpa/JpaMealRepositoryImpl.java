@@ -50,7 +50,7 @@ public class JpaMealRepositoryImpl implements MealRepository {
 
     @Override
     public Meal get(int id, int userId) {
-        List<Meal> meal = em.createQuery("SELECT m FROM Meal m where m.id=:id and m.user.id=:userId")
+        List<Meal> meal = em.createQuery("SELECT m FROM Meal m where m.id=:id and m.user.id=:userId", Meal.class)
                 .setParameter("id", id)
                 .setParameter("userId", userId)
                 .getResultList();
@@ -59,7 +59,7 @@ public class JpaMealRepositoryImpl implements MealRepository {
 
     @Override
     public List<Meal> getAll(int userId) {
-        return em.createQuery("SELECT m FROM Meal m where m.user.id=:userId ORDER BY m.dateTime DESC")
+        return em.createQuery("SELECT m FROM Meal m where m.user.id=:userId ORDER BY m.dateTime DESC", Meal.class)
                 .setParameter("userId", userId)
                 .getResultList();
 
@@ -67,7 +67,7 @@ public class JpaMealRepositoryImpl implements MealRepository {
 
     @Override
     public List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId) {
-        return em.createQuery("SELECT m FROM Meal m WHERE m.user.id=?1 AND m.dateTime BETWEEN ?2 AND ?3 ORDER BY m.dateTime DESC")
+        return em.createQuery("SELECT m FROM Meal m WHERE m.user.id=?1 AND m.dateTime BETWEEN ?2 AND ?3 ORDER BY m.dateTime DESC", Meal.class)
                 .setParameter(1, userId)
                 .setParameter(2, startDate)
                 .setParameter(3, endDate)
