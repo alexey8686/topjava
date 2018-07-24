@@ -1,7 +1,6 @@
 package ru.javawebinar.topjava.model;
 
 
-
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
@@ -12,11 +11,10 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
-@Table(name = "meals" ,uniqueConstraints = {@UniqueConstraint(columnNames = {"date_time","user_id"}, name = "meals_unique_user_datetime_idx")})
+@Table(name = "meals", uniqueConstraints = {@UniqueConstraint(columnNames = {"date_time", "user_id"}, name = "meals_unique_user_datetime_idx")})
 public class Meal extends AbstractBaseEntity {
 
-
-    @Column(name = "date_time" , nullable = false)
+    @Column(name = "date_time", nullable = false)
     @NotNull
     private LocalDateTime dateTime;
 
@@ -24,14 +22,12 @@ public class Meal extends AbstractBaseEntity {
     @NotBlank
     private String description;
 
-
-    @Column (name = "calories" , nullable = false)
-    @NotNull
-    @Range (min = 10)
+    @Column(name = "calories", nullable = false)
+    @Range(min = 10)
     private int calories;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id",nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     @NotNull
     private User user;
 

@@ -50,8 +50,8 @@ public class MealServiceTest {
     @Rule
     public final Stopwatch stopwatch = new Stopwatch() {
         protected void finished(long nanos, Description description) {
-            log.info(description.getMethodName() + " finished, time taken " + nanos + " milli sec");
-            builder.append(description.getMethodName() + " finished, time taken " + nanos + " milli sec");
+            log.info(description.getMethodName() + " finished, time taken " + nanos + " nano sec");
+            builder.append(description.getMethodName() + " finished, time taken " + nanos + " nano sec");
             builder.append("\n");
         }
 
