@@ -53,4 +53,9 @@ public class MealServiceImpl implements MealService {
         Assert.notNull(meal, "meal must not be null");
         return repository.save(meal, userId);
     }
+
+    @Override
+    public List<Meal> getAllWithUser(int userId) {
+        return repository.getAllWithUser(userId);
+    }
 }

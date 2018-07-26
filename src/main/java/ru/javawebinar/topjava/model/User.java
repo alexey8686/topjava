@@ -53,6 +53,9 @@ public class User extends AbstractNamedEntity {
     @Range(min = 10, max = 10000)
     private int caloriesPerDay = DEFAULT_CALORIES_PER_DAY;
 
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    private Set<Meal> meal = new HashSet<>();
+
     public User() {
     }
 
@@ -72,6 +75,14 @@ public class User extends AbstractNamedEntity {
         this.enabled = enabled;
         this.registered = registered;
         setRoles(roles);
+    }
+
+    public Set<Meal> getMeal() {
+        return meal;
+    }
+
+    public void setMeal(Set<Meal> meal) {
+        this.meal = meal;
     }
 
     public String getEmail() {
@@ -125,12 +136,15 @@ public class User extends AbstractNamedEntity {
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
-                ", email=" + email +
-                ", name=" + name +
+                "email='" + email + '\'' +
+                ", password='" + password + '\'' +
                 ", enabled=" + enabled +
+                ", registered=" + registered +
                 ", roles=" + roles +
                 ", caloriesPerDay=" + caloriesPerDay +
+                ", meal=" + meal +
+                ", name='" + name + '\'' +
+                ", id=" + id +
                 '}';
     }
 }
