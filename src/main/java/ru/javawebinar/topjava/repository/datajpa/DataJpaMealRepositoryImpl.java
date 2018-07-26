@@ -15,8 +15,11 @@ public class DataJpaMealRepositoryImpl implements MealRepository {
     private CrudMealRepository crudRepository;
 
     @Override
-    public Meal save(Meal Meal, int userId) {
+    public Meal save(Meal meal, int userId) {
+        if(!meal.isNew()&&crudRepository.getByIdAndUserId(meal.getId(),userId).get()==null)
         return null;
+        else
+            return meal;
     }
 
     @Override
@@ -26,12 +29,13 @@ public class DataJpaMealRepositoryImpl implements MealRepository {
 
     @Override
     public Meal get(int id, int userId) {
-        return null;
+       return crudRepository.getByIdAndUserId(id,userId).orElse(null);
+
     }
 
     @Override
     public List<Meal> getAll(int userId) {
-        return null;
+        return crudRepository.getAll(userId);
     }
 
     @Override
