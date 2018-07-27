@@ -54,7 +54,8 @@ public class User extends AbstractNamedEntity {
     private int caloriesPerDay = DEFAULT_CALORIES_PER_DAY;
 
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
-    private Set<Meal> meal = new HashSet<>();
+    @OrderBy(value = "dateTime DESC")
+    private List<Meal> meal = new ArrayList<>();
 
     public User() {
     }
@@ -77,11 +78,11 @@ public class User extends AbstractNamedEntity {
         setRoles(roles);
     }
 
-    public Set<Meal> getMeal() {
+    public List<Meal> getMeal() {
         return meal;
     }
 
-    public void setMeal(Set<Meal> meal) {
+    public void setMeal(List<Meal> meal) {
         this.meal = meal;
     }
 

@@ -30,7 +30,10 @@ public interface CrudMealRepository extends JpaRepository<Meal, Integer> {
     @Query("SELECT m FROM Meal m where m.user.id=?1 AND m.dateTime BETWEEN ?2 AND ?3 ORDER BY m.dateTime DESC ")
     List<Meal> getBetween(int userId, LocalDateTime srartDate,LocalDateTime endDate);
 
-    @Modifying
-    @Query("SELECT m FROM Meal m LEFT JOIN User u ON m.user.id= u.id where m.user.id=?1")
-    List<Meal> findAllWithUser (int userId);
+   /* @Modifying
+    @Query("SELECT m FROM Meal m   where m.id=?1 AND m.user.id=?2")*/
+    Meal findByIdAndUser_Id (int id, int userId);
+
+    @Query("SELECT m FROM Meal m JOIN FETCH m.user where m.id=?1 AND m.user.id=?2")
+    Meal getWithMeal(int id,int userId);
 }
