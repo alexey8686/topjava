@@ -20,7 +20,7 @@ public class SpringMain {
         // java 7 Automatic resource management
 
         try (GenericXmlApplicationContext appCtx = new GenericXmlApplicationContext()) {
-            appCtx.getEnvironment().setActiveProfiles("postgres","datajpa");
+            appCtx.getEnvironment().setActiveProfiles(Profiles.getActiveDbProfile(),Profiles.REPOSITORY_IMPLEMENTATION);
             appCtx.load("spring/spring-app.xml", "spring/mock.xml");
             appCtx.refresh();
             System.out.println("Bean definition names: " + Arrays.toString(appCtx.getBeanDefinitionNames()));
