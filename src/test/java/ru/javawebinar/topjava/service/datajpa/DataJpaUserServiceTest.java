@@ -3,8 +3,10 @@ package ru.javawebinar.topjava.service.datajpa;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
+import ru.javawebinar.topjava.MealTestData;
 import ru.javawebinar.topjava.Profiles;
 
+import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.service.UserServiceTest;
@@ -18,6 +20,7 @@ public class DataJpaUserServiceTest extends UserServiceTest {
 
     @Autowired
     private MealService mealService;
+
     @Test
     public void getWithMeal() {
         User user = service.getWithMeal(USER_ID);
@@ -26,12 +29,11 @@ public class DataJpaUserServiceTest extends UserServiceTest {
     }
 
     @Test
-    public void getWithMealNotFound() throws Exception {
-        thrown.expect(NotFoundException.class);
+    public void getWithNoMeal() {
         mealService.delete(ADMIN_MEAL1.getId(), ADMIN_ID);
-        mealService.delete(ADMIN_MEAL2.getId(),ADMIN_ID);
-        service.getWithMeal(ADMIN_ID);
+        mealService.delete(ADMIN_MEAL2.getId(), ADMIN_ID);
+        User user = service.getWithMeal(ADMIN_ID);
+        MealTestData.assertMatch(MealTestData.EMPTY, user.getMeal());
+        UserTestData.assertMatch(ADMIN, user);
     }
-
-
 }
