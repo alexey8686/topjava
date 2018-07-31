@@ -15,14 +15,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 
-public abstract  class   AbstractJdbcMealRepository <T> implements MealRepository {
+public abstract class AbstractJdbcMealRepository<T> implements MealRepository {
     private static final RowMapper<Meal> ROW_MAPPER = BeanPropertyRowMapper.newInstance(Meal.class);
 
-    private  JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
 
-    private  NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    private  SimpleJdbcInsert insertMeal;
+    private SimpleJdbcInsert insertMeal;
 
     @Autowired
     public void setInsertMeal(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
@@ -38,7 +38,7 @@ public abstract  class   AbstractJdbcMealRepository <T> implements MealRepositor
     public List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId) {
         return jdbcTemplate.query(
                 "SELECT * FROM meals WHERE user_id=?  AND date_time BETWEEN  ? AND ? ORDER BY date_time DESC",
-                ROW_MAPPER, userId, getDate(startDate),getDate(endDate));
+                ROW_MAPPER, userId, getDate(startDate), getDate(endDate));
     }
 
     @Override
@@ -84,8 +84,7 @@ public abstract  class   AbstractJdbcMealRepository <T> implements MealRepositor
                 "SELECT * FROM meals WHERE user_id=? ORDER BY date_time DESC", ROW_MAPPER, userId);
     }
 
-    public abstract  T getDate (LocalDateTime value);
-
+    public abstract T getDate(LocalDateTime value);
 
 
 }
