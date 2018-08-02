@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.repository.jdbc;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -8,13 +9,16 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.stereotype.Repository;
+import ru.javawebinar.topjava.Profiles;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
-
+@Repository
 public abstract class AbstractJdbcMealRepository<T> implements MealRepository {
     private static final RowMapper<Meal> ROW_MAPPER = BeanPropertyRowMapper.newInstance(Meal.class);
 
@@ -25,7 +29,7 @@ public abstract class AbstractJdbcMealRepository<T> implements MealRepository {
     private SimpleJdbcInsert insertMeal;
 
     @Autowired
-    public void setInsertMeal(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+    public AbstractJdbcMealRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate, SimpleJdbcInsert insertMeal) {
         this.insertMeal = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("meals")
                 .usingGeneratedKeyColumns("id");
@@ -85,6 +89,34 @@ public abstract class AbstractJdbcMealRepository<T> implements MealRepository {
     }
 
     public abstract T getDate(LocalDateTime value);
+
+    @Repository
+    @Profile(Profiles.HSQL_DB)
+    public class JdbcHsqlRepositoriy extends AbstractJdbcMealRepository<LocalDateTime> {
+
+        public JdbcHsqlRepositoriy(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate, SimpleJdbcInsert insertMeal) {
+            super(jdbcTemplate, namedParameterJdbcTemplate, insertMeal);
+        }
+
+        @Override
+        public LocalDateTime getDate(LocalDateTime value) {
+            return value;
+        }
+    }
+
+    @Repository
+    @Profile(Profiles.POSTGRES_DB)
+    public class JdbcPostgresRepository extends AbstractJdbcMealRepository<Timestamp> {
+
+        public JdbcPostgresRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate, SimpleJdbcInsert insertMeal) {
+            super(jdbcTemplate, namedParameterJdbcTemplate, insertMeal);
+        }
+
+        @Override
+        public Timestamp getDate(LocalDateTime value) {
+            return Timestamp.valueOf(value);
+        }
+    }
 
 
 }
