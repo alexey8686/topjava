@@ -29,7 +29,7 @@ public abstract class AbstractJdbcMealRepository<T> implements MealRepository {
     private SimpleJdbcInsert insertMeal;
 
     @Autowired
-    public AbstractJdbcMealRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate, SimpleJdbcInsert insertMeal) {
+    public AbstractJdbcMealRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.insertMeal = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("meals")
                 .usingGeneratedKeyColumns("id");
@@ -92,10 +92,10 @@ public abstract class AbstractJdbcMealRepository<T> implements MealRepository {
 
     @Repository
     @Profile(Profiles.HSQL_DB)
-    public class JdbcHsqlRepositoriy extends AbstractJdbcMealRepository<LocalDateTime> {
+    public static class JdbcHsqlRepositoriy extends AbstractJdbcMealRepository<LocalDateTime> {
 
-        public JdbcHsqlRepositoriy(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate, SimpleJdbcInsert insertMeal) {
-            super(jdbcTemplate, namedParameterJdbcTemplate, insertMeal);
+        public JdbcHsqlRepositoriy(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+            super(jdbcTemplate, namedParameterJdbcTemplate);
         }
 
         @Override
@@ -106,10 +106,10 @@ public abstract class AbstractJdbcMealRepository<T> implements MealRepository {
 
     @Repository
     @Profile(Profiles.POSTGRES_DB)
-    public class JdbcPostgresRepository extends AbstractJdbcMealRepository<Timestamp> {
+    public static class JdbcPostgresRepository extends AbstractJdbcMealRepository<Timestamp> {
 
-        public JdbcPostgresRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate, SimpleJdbcInsert insertMeal) {
-            super(jdbcTemplate, namedParameterJdbcTemplate, insertMeal);
+        public JdbcPostgresRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+            super(jdbcTemplate, namedParameterJdbcTemplate);
         }
 
         @Override
