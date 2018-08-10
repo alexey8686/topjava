@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.service;
 
-import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import javax.validation.ConstraintViolationException;
 import java.util.*;
-import java.util.function.Predicate;
 
 import static ru.javawebinar.topjava.UserTestData.*;
 
@@ -79,7 +77,7 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
         role.add(Role.ROLE_ADMIN);
         updated.setRoles(role);
         service.update(updated);
-        assertMatch(service.get(USER_ID),updated);
+        assertMatch(service.get(USER_ID), updated);
     }
 
     @Test
