@@ -23,11 +23,8 @@ import java.util.*;
 public class JdbcUserRepositoryImpl implements UserRepository {
 
     private static final BeanPropertyRowMapper<User> ROW_MAPPER = BeanPropertyRowMapper.newInstance(User.class);
-    private static final BeanPropertyRowMapper<Role> MAPPER = BeanPropertyRowMapper.newInstance(Role.class);
     private final JdbcTemplate jdbcTemplate;
-
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
     private final SimpleJdbcInsert insertUser;
 
     @Autowired
@@ -35,7 +32,6 @@ public class JdbcUserRepositoryImpl implements UserRepository {
         this.insertUser = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("users")
                 .usingGeneratedKeyColumns("id");
-
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
@@ -44,11 +40,9 @@ public class JdbcUserRepositoryImpl implements UserRepository {
     @Transactional
     public User save(User user) {
         BeanPropertySqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
-
         if (user.isNew()) {
             Number newKey = insertUser.executeAndReturnKey(parameterSource);
             user.setId(newKey.intValue());
-            insertRole(user);
         } else {
             if (namedParameterJdbcTemplate.update(
                     "UPDATE users SET name=:name, email=:email, password=:password, " +
@@ -57,10 +51,8 @@ public class JdbcUserRepositoryImpl implements UserRepository {
                 return null;
             }
             jdbcTemplate.update("DELETE FROM user_roles WHERE user_id=?", user.getId());
-            insertRole(user);
-
-
         }
+        insertRole(user);
         return user;
     }
 
@@ -96,7 +88,6 @@ public class JdbcUserRepositoryImpl implements UserRepository {
         List<User> users = jdbcTemplate.query("SELECT * FROM users  ORDER BY name, email", ROW_MAPPER);
         users.forEach(u -> u.setRoles(roleMap.get(u.getId())));
         return users;
-
     }
 
     public User setRole(User user) {
@@ -119,8 +110,6 @@ public class JdbcUserRepositoryImpl implements UserRepository {
                 preparedStatement.setString(2, role.name());
             }
         }
-        ;
         jdbcTemplate.batchUpdate("INSERT INTO user_roles (user_id,role) VALUES (?, ?)", roleSet, roleSet.size(), new setParam());
     }
-
 }
