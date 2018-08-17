@@ -26,13 +26,13 @@
     <bean id="conversationService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
         <property name="converters">
             <set>
-                <ref bean="timeConverter"/>
-                <ref bean="dateConverter"/>
+                <bean class="ru.javawebinar.topjava.web.CustomConverter.LocalDateConverter"/>
+                <bean class="ru.javawebinar.topjava.web.CustomConverter.LocalTimeConverter"/>
             </set>
         </property>
     </bean>
-    <bean id="dateConverter" class="ru.javawebinar.topjava.util.CustomConverter.LocalDateConverter"/>
-    <bean id="timeConverter" class="ru.javawebinar.topjava.util.CustomConverter.LocalTimeConverter"/>
+
+
 
     <context:component-scan base-package="ru.javawebinar.**.web"/>
 
