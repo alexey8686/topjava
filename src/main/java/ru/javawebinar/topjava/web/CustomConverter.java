@@ -22,9 +22,6 @@ public class CustomConverter {
 
         @Override
         public LocalDate convert(String source) {
-            if (source == null || source.isEmpty()) {
-                return null;
-            }
             return parseLocalDate(source);
         }
     }

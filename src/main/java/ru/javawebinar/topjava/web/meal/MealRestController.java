@@ -1,7 +1,7 @@
 package ru.javawebinar.topjava.web.meal;
 
 
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -10,7 +10,6 @@ import ru.javawebinar.topjava.to.MealWithExceed;
 
 import java.net.URI;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -24,32 +23,33 @@ public class MealRestController extends AbstractMealController {
     static final String REST_URL = "/rest/meals";
 
     @RequestMapping(produces = APPLICATION_JSON_VALUE)
-    public List<MealWithExceed> getAll (){
+    public List<MealWithExceed> getAll() {
         return super.getAll();
     }
 
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
-    public Meal get (@PathVariable("id")int id){
+    public Meal get(@PathVariable("id") int id) {
         return super.get(id);
     }
 
     @DeleteMapping(value = "/{id}")
-    public void delete (@PathVariable("id")int id){
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable("id") int id) {
         super.delete(id);
     }
 
-    @PutMapping (value ="/{id}", consumes = APPLICATION_JSON_VALUE)
-    public void update (@PathVariable("id")int id, @RequestBody Meal meal){
+    @PutMapping(value = "/{id}", consumes = APPLICATION_JSON_VALUE)
+    public void update(@PathVariable("id") int id, @RequestBody Meal meal) {
         super.update(meal, id);
     }
 
-    @PostMapping (produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity <Meal> creates (@RequestBody Meal meal){
-       Meal created = super.create(meal);
+    @PostMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Meal> creates(@RequestBody Meal meal) {
+        Meal created = super.create(meal);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
-       return ResponseEntity.created(uriOfNewResource).body(created);
+        return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
   /*  @GetMapping (value = "/filter",params = {"startDate","startTime","endDate","endTime"},produces = APPLICATION_JSON_VALUE)
@@ -60,11 +60,11 @@ public class MealRestController extends AbstractMealController {
         return super.getBetween(startDate.toLocalDate(),startTime.toLocalTime(),endDate.toLocalDate(),endTime.toLocalTime());
     }*/
 
-    @GetMapping (value = "/filter",params = {"startDate","startTime","endDate","endTime"},produces = APPLICATION_JSON_VALUE)
-    public List <MealWithExceed> getBetween (@RequestParam(value = "startDate") LocalDate startDate,
-                                             @RequestParam(value = "startTime") LocalTime startTime,
-                                             @RequestParam(value = "endDate") LocalDate endDate,
-                                             @RequestParam(value = "endTime") LocalTime endTime){
-        return super.getBetween(startDate,startTime,endDate,endTime);
-        }
+    @GetMapping(value = "/filter", params = {"startDate", "startTime", "endDate", "endTime"}, produces = APPLICATION_JSON_VALUE)
+    public List<MealWithExceed> getBetween(@RequestParam(value = "startDate", required = false) LocalDate startDate,
+                                           @RequestParam(value = "startTime", required = false) LocalTime startTime,
+                                           @RequestParam(value = "endDate", required = false) LocalDate endDate,
+                                           @RequestParam(value = "endTime", required = false) LocalTime endTime) {
+        return super.getBetween(startDate, startTime, endDate, endTime);
+    }
 }
