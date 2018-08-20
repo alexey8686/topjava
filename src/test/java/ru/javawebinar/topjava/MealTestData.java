@@ -49,11 +49,7 @@ public class MealTestData {
         assertThat(actual).usingElementComparatorIgnoringFields("user").isEqualTo(expected);
     }
 
-    public static ResultMatcher contentJson(Meal expected) {
-        return content().json(JsonUtil.writeIgnoreProps(expected, "user"));
-    }
-
-    public static ResultMatcher contentJson(Meal... expected) {
-        return content().json(JsonUtil.writeIgnoreProps(Arrays.asList(expected), "user"));
+    public static <T> ResultMatcher contentJson(T expected) {
+        return content().json(JsonUtil.writeValue(expected));
     }
 }

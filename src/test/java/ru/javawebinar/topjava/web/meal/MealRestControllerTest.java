@@ -1,26 +1,44 @@
 package ru.javawebinar.topjava.web.meal;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
 import org.springframework.test.web.servlet.ResultActions;
 import ru.javawebinar.topjava.TestUtil;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
+
+import java.util.Arrays;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static ru.javawebinar.topjava.MealTestData.*;
+import static ru.javawebinar.topjava.UserTestData.USER;
 import static ru.javawebinar.topjava.UserTestData.USER_ID;
+import static ru.javawebinar.topjava.util.MealsUtil.*;
 
 public class MealRestControllerTest extends AbstractControllerTest {
+
+    @Autowired
+    protected MealService mealService;
 
     private static final String REST_URL = MealRestController.REST_URL + '/';
 
     private static final String FILTER = "filter?startDate=2015-05-30"
             + "&startTime=09:00&endDate=2015-05-30&endTime=21:00";
+
+    @Test
+    void getAllTest() throws Exception {
+        mockMvc.perform(get(REST_URL))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(contentJson(getWithExceeded(MEALS,USER.getCaloriesPerDay())));
+    }
 
     @Test
     void getTest() throws Exception {
@@ -69,6 +87,6 @@ public class MealRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(contentJson(MEAL3, MEAL2, MEAL1));
+                .andExpect(contentJson(getWithExceeded(Arrays.asList(MEAL3, MEAL2, MEAL1),USER.getCaloriesPerDay())));
     }
 }

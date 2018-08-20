@@ -17,17 +17,17 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static ru.javawebinar.topjava.web.meal.MealRestController.REST_URL;
 
 @RestController
-@RequestMapping(value = REST_URL)
+@RequestMapping(value = REST_URL, produces = APPLICATION_JSON_VALUE)
 public class MealRestController extends AbstractMealController {
 
     static final String REST_URL = "/rest/meals";
 
-    @RequestMapping(produces = APPLICATION_JSON_VALUE)
+    @GetMapping
     public List<MealWithExceed> getAll() {
         return super.getAll();
     }
 
-    @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}")
     public Meal get(@PathVariable("id") int id) {
         return super.get(id);
     }
@@ -43,7 +43,7 @@ public class MealRestController extends AbstractMealController {
         super.update(meal, id);
     }
 
-    @PostMapping(produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = APPLICATION_JSON_VALUE)
     public ResponseEntity<Meal> creates(@RequestBody Meal meal) {
         Meal created = super.create(meal);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -60,7 +60,7 @@ public class MealRestController extends AbstractMealController {
         return super.getBetween(startDate.toLocalDate(),startTime.toLocalTime(),endDate.toLocalDate(),endTime.toLocalTime());
     }*/
 
-    @GetMapping(value = "/filter", params = {"startDate", "startTime", "endDate", "endTime"}, produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/filter", params = {"startDate", "startTime", "endDate", "endTime"})
     public List<MealWithExceed> getBetween(@RequestParam(value = "startDate", required = false) LocalDate startDate,
                                            @RequestParam(value = "startTime", required = false) LocalTime startTime,
                                            @RequestParam(value = "endDate", required = false) LocalDate endDate,

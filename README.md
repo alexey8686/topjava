@@ -193,3 +193,38 @@ Java Enterprise Online Project
 -  <a href="http://www.bookvoed.ru/book?id=639284">Редмонд Э.: Семь баз данных за семь недель. Введение в современные базы данных и идеологию NoSQL</a>
 -  <a href="http://www.ozon.ru/context/detail/id/3174887/">Brian Goetz: Java Concurrency in Practice</a>
 -  <a href="http://bookvoed.ru/book?id=2593572">G.L. McDowell: Cracking the Coding Interview</a>
+
+
+CURL:
+
+getAll
+curl--header "Content-Type: application/json" \
+  --request GET \
+  http://localhost:8080/topjava/rest/meals
+
+create
+curl --header "Content-Type: application/json" \
+  --request POST \
+  --data '{"dateTime": "2018-08-19T10:00","description": "Новый завтрак","calories": 500}' \
+  http://localhost:8080/topjava/rest/meals
+  
+  get
+ curl --header "Content-Type: application/json" \
+  --request GET \
+  http://localhost:8080/topjava/rest/meals/100002
+  
+   delete
+ curl --header "Content-Type: application/json" \
+  --request DELETE \
+  http://localhost:8080/topjava/rest/meals/100002
+  
+   update
+ curl --header "Content-Type: application/json" \
+  --request PUT \
+  --data '{"dateTime": "2015-05-30T10:00","description": "Измененный завтрак","calories": 500}' \
+  http://localhost:8080/topjava/rest/meals/100002
+  
+  filter
+ curl --header "Content-Type: application/json" \
+  --request GET \
+  http://localhost:8080/topjava/rest/meals/filter/startDate=2015-05-30&startTime=09:00&endDate=2015-05-30&endTime=21:00
