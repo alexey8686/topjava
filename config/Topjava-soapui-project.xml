@@ -375,7 +375,7 @@
   <con:entry key="endTime" value="21:00"/>
   <con:entry key="startDate" value="2015-05-30"/>
 </con:parameters><con:parameterOrder><con:entry>startDate</con:entry><con:entry>startTime</con:entry><con:entry>endDate</con:entry><con:entry>endTime</con:entry></con:parameterOrder></con:request></con:method></con:resource></con:interface>
-    <con:properties/>
+    <con:restMockService id="f1b957be-cb98-4bb1-b962-c19a9e0653c9" port="8080" path="/" host="ASUTP"><con:settings/><con:properties/></con:restMockService><con:properties/>
     <con:wssContainer/>
     <con:oAuth2ProfileContainer/>
     <con:oAuth1ProfileContainer/>
