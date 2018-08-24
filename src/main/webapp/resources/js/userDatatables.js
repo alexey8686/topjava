@@ -40,3 +40,22 @@ $(function () {
     });
     makeEditable();
 });
+
+function setEnable(id) {
+    var form = "#" + id;
+    if ($(form).is(':checked')) {
+        alert("checked");
+    }
+    else {
+        alert("unchecked");
+    }
+    /*var form = $("${user.id}");
+    $.ajax({
+      url:ajaxUrl+ "enable",
+      type:"POST",
+      data: form.serialize(),
+      success:function () {
+          updateTable()
+      }
+    })*/
+}

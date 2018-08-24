@@ -48,7 +48,7 @@ function filtration() {
     })
 
 }
-function saveMeal() {
+function saveMeal(id) {
     var form = $("#detailsForm");
     $.ajax({
         type: "POST",

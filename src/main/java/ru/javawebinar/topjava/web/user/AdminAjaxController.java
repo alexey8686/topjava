@@ -35,4 +35,5 @@ public class AdminAjaxController extends AbstractUserController {
         }
     }
 
+
 }
