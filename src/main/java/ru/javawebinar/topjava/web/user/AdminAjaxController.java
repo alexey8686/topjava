@@ -34,4 +34,5 @@ public class AdminAjaxController extends AbstractUserController {
             super.create(user);
         }
     }
+
 }
