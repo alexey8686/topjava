@@ -42,20 +42,11 @@ $(function () {
 });
 
 function setEnable(id) {
-    var form = "#" + id;
-    if ($(form).is(':checked')) {
-        alert("checked");
-    }
-    else {
-        alert("unchecked");
-    }
-    /*var form = $("${user.id}");
+    var enabled = $(form).is(':checked');
     $.ajax({
-      url:ajaxUrl+ "enable",
-      type:"POST",
-      data: form.serialize(),
-      success:function () {
-          updateTable()
-      }
-    })*/
+        url: ajaxUrl + id,
+        type: "POST",
+        data: "enabled=" + enabled
+    });
+
 }
