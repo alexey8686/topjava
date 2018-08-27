@@ -42,6 +42,7 @@ $(function () {
 });
 
 function setEnable(id) {
+    var form = "#" + id;
     var enabled = $(form).is(':checked');
     $.ajax({
         url: ajaxUrl + id,
