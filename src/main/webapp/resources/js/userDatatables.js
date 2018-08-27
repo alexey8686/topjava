@@ -44,10 +44,15 @@ $(function () {
 function setEnable(id) {
     var form = "#" + id;
     var enabled = $(form).is(':checked');
+
     $.ajax({
         url: ajaxUrl + id,
         type: "POST",
-        data: "enabled=" + enabled
+        data: "enabled=" + enabled,
+        success: function () {
+            $(form).closest("tr").attr("data-enabled",enabled);
+            successNoty(enabled?"enabled":"disabled");
+        }
     });
 
 }

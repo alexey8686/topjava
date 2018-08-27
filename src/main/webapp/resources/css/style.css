@@ -22,6 +22,9 @@ tr[data-mealExceed="false"] {
 tr[data-mealExceed="true"] {
     color: red;
 }
+tr[data-Enabled="false"]{
+    text-decoration: line-through;
+}
 
 .fa {
     cursor: pointer;
