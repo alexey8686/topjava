@@ -50,8 +50,8 @@ function setEnable(id) {
         type: "POST",
         data: "enabled=" + enabled,
         success: function () {
-            $(form).closest("tr").attr("data-enabled",enabled);
-            successNoty(enabled?"enabled":"disabled");
+            $(form).closest("tr").attr("data-enabled", enabled);
+            successNoty(enabled ? "enabled" : "disabled");
         }
     });
 

@@ -17,7 +17,7 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">From</span>
                 </div>
-                <input type="date" class="form-control"  id="startDate" name="startDate" placeholder="FromDate">
+                <input type="date" class="form-control" id="startDate" name="startDate" placeholder="FromDate">
                 <input type="time" class="form-control" id="startTime" name="startTime" placeholder="FromTime">
                 <div class="input-group-prepend">
                     <span class="input-group-text">To</span>
@@ -85,7 +85,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="description" class="col-form-label"><spring:message code="meal.description"/></label>
+                        <label for="description" class="col-form-label"><spring:message
+                                code="meal.description"/></label>
                         <input type="text" class="form-control" id="description" name="description"
                                placeholder="<spring:message code="meal.description"/>">
                     </div>
@@ -102,7 +103,7 @@
                     <span class="fa fa-close"></span>
                     <spring:message code="common.cancel"/>
                 </button>
-                <button type="button" class="btn btn-primary" onclick="saveMeal()">
+                <button type="button" class="btn btn-primary" onclick="save()">
                     <span class="fa fa-check"></span>
                     <spring:message code="common.save"/>
                 </button>

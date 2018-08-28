@@ -18,7 +18,7 @@ function deleteRow(id) {
         url: ajaxUrl + id,
         type: "DELETE",
         success: function () {
-            updateTable();
+            choosRealisation();
             successNoty("Deleted");
         }
     });
@@ -26,8 +26,12 @@ function deleteRow(id) {
 
 function updateTable() {
     $.get(ajaxUrl, function (data) {
-        datatableApi.clear().rows.add(data).draw();
+        cleanAndAdd(data);
     });
+}
+
+function cleanAndAdd(data) {
+    datatableApi.clear().rows.add(data).draw();
 }
 
 function save() {
@@ -38,10 +42,20 @@ function save() {
         data: form.serialize(),
         success: function () {
             $("#editRow").modal("hide");
-            updateTable();
+            choosRealisation();
             successNoty("Saved");
         }
     });
+}
+
+function choosRealisation() {
+    if (ajaxUrl === "ajax/meal/") {
+        filtration();
+    }
+    else {
+        updateTable();
+    }
+
 }
 
 var failedNote;

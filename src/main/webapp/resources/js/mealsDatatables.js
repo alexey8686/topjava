@@ -28,7 +28,7 @@ $(function () {
         "order": [
             [
                 0,
-                "asc"
+                "desc"
             ]
         ]
     });
@@ -39,25 +39,12 @@ function filtration() {
     var form = $("#filterForm")
 
     $.ajax({
-        url:ajaxUrl + "filter",
+        url: ajaxUrl + "filter",
         type: "GET",
         data: form.serialize(),
         success: function (data) {
-            datatableApi.clear().rows.add(data).draw();
+            cleanAndAdd(data);
         }
     })
 
-}
-function saveMeal(id) {
-    var form = $("#detailsForm");
-    $.ajax({
-        type: "POST",
-        url: ajaxUrl,
-        data: form.serialize(),
-        success: function () {
-            $("#editRow").modal("hide");
-            filtration();
-            successNoty("Saved");
-        }
-    });
 }
