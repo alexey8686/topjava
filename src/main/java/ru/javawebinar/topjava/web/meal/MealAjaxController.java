@@ -14,7 +14,8 @@ import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.StringJoiner;
+
+import static ru.javawebinar.topjava.util.Util.getStringResponseEntity;
 
 @RestController
 @RequestMapping(value = "/ajax/profile/meals")
@@ -32,15 +33,17 @@ public class MealAjaxController extends AbstractMealController {
         super.delete(id);
     }
 
+    @Override
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Meal get(@PathVariable(value = "id") int id) {
+        return super.get(id);
+    }
+
+
     @PostMapping
     public ResponseEntity<String> createOrUpdate(@Valid MealTo meal, BindingResult result) {
-        if (result.hasErrors()) {
-            StringJoiner joiner = new StringJoiner("<br>");
-            result.getFieldErrors().forEach(er -> joiner.add(er.getField()+" - "+er.getDefaultMessage()));
-
-            return new ResponseEntity<>(joiner.toString(), HttpStatus.UNPROCESSABLE_ENTITY);
-
-        }
+        ResponseEntity<String> joiner = getStringResponseEntity(result);
+        if (joiner != null) return joiner;
         if (meal.isNew()) {
             super.create(MealsUtil.createNewFromTo(meal));
         } else {

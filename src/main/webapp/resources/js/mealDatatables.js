@@ -16,7 +16,7 @@ function clearFilter() {
 
 $(function () {
     datatableApi = $("#datatable").DataTable({
-        "ajax":{
+        "ajax": {
             "url": ajaxUrl,
             "dataSrc": ""
         },
@@ -29,7 +29,7 @@ $(function () {
 
                     if (type === "display") {
 
-                        return  date.toLocaleString().replace("T"," ")
+                        return date.toLocaleString().replace("T", " ")
                     }
                     return date;
                 }
@@ -63,13 +63,21 @@ $(function () {
             if (!data.exceed) {
                 $(row).attr("data-mealExceed", false);
             }
-            else{
+            else {
                 $(row).attr("data-mealExceed", true);
             }
         },
         "initComplete": makeEditable
     });
 
+    $('#startDate,#endDate').datetimepicker({
+        timepicker: false,
+        format: 'Y-m-d'
+    });
+    $('#startTime, #endTime').datetimepicker({
+        datepicker: false,
+        format: 'H:i'
+    });
     $('#dateTime').datetimepicker({
         format: 'Y-m-d H:i'
     });

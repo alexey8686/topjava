@@ -21,22 +21,22 @@
                             <div class="form-group">
                                 <label class="col-form-label" for="startDate"><spring:message
                                         code="meal.startDate"/></label>
-                                <input class="form-control col-6" type="date" name="startDate" id="startDate">
+                                <input class="form-control col-6" type="text" name="startDate" id="startDate">
 
                                 <label class="col-form-label" for="endDate"><spring:message
                                         code="meal.endDate"/></label>
-                                <input class="form-control col-6" type="date" name="endDate" id="endDate">
+                                <input class="form-control col-6" type="text" name="endDate" id="endDate">
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="form-group">
                                 <label class="col-form-label" for="startTime"><spring:message
                                         code="meal.startTime"/></label>
-                                <input class="form-control col-6" type="time" name="startTime" id="startTime">
+                                <input class="form-control col-6" type="text" name="startTime" id="startTime">
 
                                 <label class="col-form-label" for="endTime"><spring:message
                                         code="meal.endTime"/></label>
-                                <input class="form-control col-6" type="time" name="endTime" id="endTime">
+                                <input class="form-control col-6" type="text" name="endTime" id="endTime">
                             </div>
                         </div>
                     </div>
@@ -86,7 +86,7 @@
 
                     <div class="form-group">
                         <label for="dateTime" class="col-form-label"><spring:message code="meal.dateTime"/></label>
-                        <input  type="text" class="form-control" id="dateTime" name="dateTime" 
+                        <input type="text" class="form-control" id="dateTime" name="dateTime"
                                placeholder="<spring:message code="meal.dateTime"/>">
                     </div>
 
@@ -117,14 +117,9 @@
     </div>
 </div>
 <jsp:include page="fragments/footer.jsp"/>
-<script type="text/javascript">
-    var i18n = [];
-    i18n["addTitle"] = '<spring:message code="meal.add"/>';
-    i18n["editTitle"] = '<spring:message code="meal.edit"/>';
-
-    <c:forEach var="key" items='<%=new String[]{"common.deleted","common.saved","common.enabled","common.disabled","common.errorStatus"}%>'>
-    i18n["${key}"] = "<spring:message code="${key}"/>";
-    </c:forEach>
-</script>
+<jsp:include page="fragments/i18n.jsp">
+    <jsp:param name="adding" value="meal"/>
+    <jsp:param name="editing" value="meal"/>
+</jsp:include>
 </body>
 </html>
