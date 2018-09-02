@@ -86,8 +86,9 @@
 
                     <div class="form-group">
                         <label for="dateTime" class="col-form-label"><spring:message code="meal.dateTime"/></label>
-                        <input type="text" class="form-control" id="dateTime" name="dateTime"
-                               placeholder="<spring:message code="meal.dateTime"/>">
+                        <input  type="text" class="form-control" id="dateTime" name="dateTime"
+                               placeholder="<spring:message code="meal.dateTime" />" >
+
                     </div>
 
                     <div class="form-group">
@@ -118,8 +119,7 @@
 </div>
 <jsp:include page="fragments/footer.jsp"/>
 <jsp:include page="fragments/i18n.jsp">
-    <jsp:param name="adding" value="meal"/>
-    <jsp:param name="editing" value="meal"/>
+    <jsp:param name="page" value="meal"/>
 </jsp:include>
 </body>
 </html>

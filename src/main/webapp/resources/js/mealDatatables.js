@@ -29,7 +29,7 @@ $(function () {
 
                     if (type === "display") {
 
-                        return date.toLocaleString().replace("T", " ")
+                        return date.toLocaleString().replace("T", " ").substr(0,16);
                     }
                     return date;
                 }
@@ -60,12 +60,7 @@ $(function () {
             ]
         ],
         "createdRow": function (row, data, dataIndex) {
-            if (!data.exceed) {
-                $(row).attr("data-mealExceed", false);
-            }
-            else {
-                $(row).attr("data-mealExceed", true);
-            }
+            $(row).attr("data-mealExceed", data.exceed);
         },
         "initComplete": makeEditable
     });
