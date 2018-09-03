@@ -40,7 +40,7 @@ public class MealAjaxController extends AbstractMealController {
 
 
     @PostMapping
-    public ResponseEntity<String> createOrUpdate(@Validated(ValidationGroups.ValidationTwo.class) Meal meal, BindingResult result) {
+    public ResponseEntity<String> createOrUpdate(@Validated(ValidationGroups.ValidationMeals.class) Meal meal, BindingResult result) {
         ResponseEntity<String> joiner = getStringResponseEntity(result);
         if (joiner != null) return joiner;
         if (meal.isNew()) {

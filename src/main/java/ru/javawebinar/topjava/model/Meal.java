@@ -11,6 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.validation.groups.Default;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -32,24 +33,24 @@ public class Meal extends AbstractBaseEntity {
     public static final String GET_BETWEEN = "Meal.getBetween";
 
     @Column(name = "date_time", nullable = false)
-    @NotNull(groups = ValidationGroups.ValidationTwo.class)
+    @NotNull(groups = {ValidationGroups.ValidationMeals.class, Default.class})
     @DateTimeFormat(pattern = DateTimeUtil.PATTERN)
     private LocalDateTime dateTime;
 
     @Column(name = "description", nullable = false)
-    @NotBlank(groups = ValidationGroups.ValidationTwo.class)
-    @Size(min = 2, max = 120)
+    @NotBlank
+    @Size(min = 2, max = 120,groups = {ValidationGroups.ValidationMeals.class, Default.class})
     private String description;
 
-    @NotNull(groups = ValidationGroups.ValidationTwo.class)
+    @NotNull(groups = {ValidationGroups.ValidationMeals.class, Default.class})
     @Column(name = "calories", nullable = false)
-    @Range(min = 10, max = 5000)
+    @Range(min = 10, max = 5000,groups = {ValidationGroups.ValidationMeals.class, Default.class})
     private Integer calories;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @NotNull(groups = ValidationGroups.ValidationOne.class)
+    @NotNull()
     private User user;
 
     public Meal() {
