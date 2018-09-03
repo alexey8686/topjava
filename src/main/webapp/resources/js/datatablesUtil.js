@@ -8,9 +8,6 @@ function makeEditable() {
 
     // solve problem with cache in IE: https://stackoverflow.com/a/4303862/548473
     $.ajaxSetup({cache: false});
-
-    $("#datetimepicker").datetimepicker();
-
 }
 
 function add() {
@@ -24,7 +21,7 @@ function updateRow(id) {
     $.get(ajaxUrl + id, function (data) {
         $.each(data, function (key, value) {
             if(key==="dateTime"){
-                value = value.toString().replace("T"," ").substr(0,16);
+                value = formatDate(value)
             }
             form.find("input[name='" + key + "']").val(value);
         });
@@ -97,4 +94,8 @@ function renderDeleteBtn(data, type, row) {
     if (type === "display") {
         return "<a onclick='deleteRow(" + row.id + ");'><span class='fa fa-remove'></span></a>";
     }
+}
+
+function formatDate (value){
+    return value.toString().replace("T"," ").substr(0,16);
 }

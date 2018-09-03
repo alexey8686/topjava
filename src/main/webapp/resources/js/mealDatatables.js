@@ -29,7 +29,7 @@ $(function () {
 
                     if (type === "display") {
 
-                        return date.toLocaleString().replace("T", " ").substr(0,16);
+                        return formatDate(date)
                     }
                     return date;
                 }
