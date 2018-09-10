@@ -1,4 +1,4 @@
-const form = $('#detailsForm');
+let form;
 
 function makeEditable() {
     $(document).ajaxError(function (event, jqXHR, options, jsExc) {
