@@ -6,6 +6,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import ru.javawebinar.topjava.TestUtil;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
+
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
@@ -18,6 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static ru.javawebinar.topjava.TestUtil.readFromJson;
 import static ru.javawebinar.topjava.TestUtil.userHttpBasic;
 import static ru.javawebinar.topjava.UserTestData.*;
+
 
 class AdminRestControllerTest extends AbstractControllerTest {
 
@@ -118,5 +120,54 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(contentJson(ADMIN, USER)));
+    }
+
+    @Test
+    public void testCreateInvalid() throws Exception {
+        User expected = new User(null, null, "", "newPass", 7300, Role.ROLE_USER, Role.ROLE_ADMIN);
+        ResultActions action = mockMvc.perform(post(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(ADMIN))
+                .content(JsonUtil.writeValue(expected)))
+                .andExpect(status().isUnprocessableEntity())
+                .andDo(print());
+    }
+
+    @Test
+    public void testUpdateInvalid() throws Exception {
+        User updated = new User(USER);
+        updated.setName("");
+        mockMvc.perform(put(REST_URL + USER_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(ADMIN))
+                .content(JsonUtil.writeValue(updated)))
+                .andExpect(status().isUnprocessableEntity())
+                .andDo(print())
+
+                .andDo(print());
+    }
+
+    @Test
+    public void testUpdateDuplicate() throws Exception {
+        User updated = new User(USER);
+        updated.setEmail("admin@gmail.com");
+        mockMvc.perform(put(REST_URL + USER_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(ADMIN))
+                .content(jsonWithPassword(updated, "password")))
+                .andExpect(status().isConflict())
+                .andDo(print());
+    }
+
+    @Test
+    public void testCreateDuplicate() throws Exception {
+        User expected = new User(null, "New", "user@yandex.ru", "newPass", 2300, Role.ROLE_USER, Role.ROLE_ADMIN);
+        mockMvc.perform(post(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(ADMIN))
+                .content(jsonWithPassword(expected, "newPass")))
+                .andExpect(status().isConflict());
+
+
     }
 }
