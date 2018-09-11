@@ -49,7 +49,7 @@ public class ExceptionInfoHandler {
             if (msg.toLowerCase().contains("users_unique_email_idx")){
                 return logAndGetErrorInfo(req, e, true, DATA_ERROR,messageSource.getMessage("exeption.user.email",null,req.getLocale()));
             }
-            else if(msg.toLowerCase().contains("exception.meal.duplicateDateTime")){
+            else if(msg.toLowerCase().contains("meals_unique_user_datetime_idx")){
                 return logAndGetErrorInfo(req, e, true, DATA_ERROR,messageSource.getMessage("exeption.meal.date",null,req.getLocale()));
             }
 
