@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 public class GlobalControllerExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(GlobalControllerExceptionHandler.class);
 
-    @Autowired
+    @Autowired(required = false)
     ReloadableResourceBundleMessageSource messageSource;
 
     @ExceptionHandler(Exception.class)

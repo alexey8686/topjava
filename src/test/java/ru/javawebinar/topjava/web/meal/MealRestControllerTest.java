@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.util.MealsUtil;
@@ -158,12 +160,13 @@ class MealRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    @Transactional(propagation = Propagation.NEVER)
     public void testCreateDuplicate() throws Exception {
-        Meal invalid = new Meal(null, ADMIN_MEAL1.getDateTime(), "Dummy", 200);
+        Meal invalid = new Meal(null, MEAL1.getDateTime(), "Завтрак", 200);
         mockMvc.perform(post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(invalid))
-                .with(userHttpBasic(ADMIN)))
+                .with(userHttpBasic(USER)))
                 .andDo(print())
                 .andExpect(status().isConflict());
 

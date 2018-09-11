@@ -31,7 +31,7 @@ import static ru.javawebinar.topjava.util.exception.ErrorType.*;
 public class ExceptionInfoHandler {
     private static Logger log = LoggerFactory.getLogger(ExceptionInfoHandler.class);
 
-    @Autowired
+    @Autowired(required = false)
     ReloadableResourceBundleMessageSource messageSource;
 
     //  http://stackoverflow.com/a/22358422/548473
