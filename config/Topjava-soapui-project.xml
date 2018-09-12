@@ -98,7 +98,7 @@
                 </con:request>
             </con:method>
         </con:resource>
-        <con:resource name="user" path="/topjava/rest/admin/users/100000" id="7f8ab4ae-b6a8-4aa8-a502-9dbebb27ad8b">
+        <con:resource name="user" path="/topjava/rest/admin/users/100008" id="7f8ab4ae-b6a8-4aa8-a502-9dbebb27ad8b">
             <con:settings/>
             <con:parameters/>
             <con:method name="" method="GET" id="7a2525a5-8d97-4c33-97ab-dc071c529154">
@@ -106,7 +106,7 @@
                 <con:parameters/>
                 <con:representation type="FAULT">
                     <con:mediaType>text/html;charset=utf-8</con:mediaType>
-                    <con:status>500</con:status>
+                    <con:status>500 401</con:status>
                     <con:params/>
                     <con:element>html</con:element>
                 </con:representation>
@@ -122,7 +122,7 @@
                     <con:params/>
                     <con:element xmlns:ns="http://localhost/topjava/rest/admin/users/100000">ns:Response</con:element>
                 </con:representation>
-                <con:request name="AdminGet" mediaType="application/json" id="4f099c7f-94dc-466b-a544-6c8e41bdd691">
+                <con:representation type="FAULT"><con:mediaType>application/json;charset=UTF-8</con:mediaType><con:status>422</con:status><con:params/><con:element xmlns:ns="http://localhost/topjava/rest/admin/users/100000">ns:Fault</con:element></con:representation><con:request name="AdminGet" mediaType="application/json" id="4f099c7f-94dc-466b-a544-6c8e41bdd691">
                     <con:settings>
                         <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
                     </con:settings>
@@ -130,9 +130,9 @@
                     <con:request/>
                     <con:originalUri>http://localhost/topjava/rest/admin/users/100000</con:originalUri>
                     <con:credentials>
-                        <con:selectedAuthProfile>No Authorization</con:selectedAuthProfile>
+                        <con:username>admin@gmail.com</con:username><con:password>admin</con:password><con:selectedAuthProfile>Basic</con:selectedAuthProfile>
                         <con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes>
-                        <con:authType>No Authorization</con:authType>
+                        <con:authType>Global HTTP Settings</con:authType>
                     </con:credentials>
                     <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
                     <con:jmsPropertyConfig/>
@@ -420,21 +420,20 @@
                     <con:params/>
                     <con:element xmlns:meal="http://localhost/topjava/rest/profile/meals">meal:Response</con:element>
                 </con:representation>
-                <con:request name="Create" id="17ccc2a1-4f1a-4715-afd3-e15984f11550" mediaType="application/json" postQueryString="false">
+                <con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:request name="Create" id="17ccc2a1-4f1a-4715-afd3-e15984f11550" mediaType="application/json" postQueryString="false">
                     <con:settings>
-                        <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/>
-                        </con:setting>
+                        <con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting>
                     </con:settings>
                     <con:endpoint>http://localhost:8080</con:endpoint>
                     <con:request>{
-"dateTime": "2015-06-01T10:00",
+"dateTime": "2015-05-30T10:00",
 "description": "Новый завтрак",
 "calories": 777
 }
                     </con:request>
                     <con:originalUri>http://localhost/topjava/rest/profile/meals</con:originalUri>
                     <con:credentials>
-                        <con:authType>No Authorization</con:authType>
+                        <con:username>user@yandex.ru</con:username><con:password>password</con:password><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType>
                     </con:credentials>
                     <con:jmsConfig JMSDeliveryMode="PERSISTENT"/>
                     <con:jmsPropertyConfig/>
