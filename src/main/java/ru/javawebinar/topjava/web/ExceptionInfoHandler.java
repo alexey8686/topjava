@@ -63,7 +63,7 @@ public class ExceptionInfoHandler {
     @ExceptionHandler({BindException.class, MethodArgumentNotValidException.class})
     public ErrorInfo bindValidationError(HttpServletRequest req, Exception e) {
         BindingResult bindingResult = e instanceof BindException ? ((BindException) e).getBindingResult() : ((MethodArgumentNotValidException) e).getBindingResult();
-        String[] message = bindingResult.getFieldErrors().stream().map(ex -> getMassage(ex)).toArray(String[]::new);
+        String[] message = bindingResult.getFieldErrors().stream().map(ex -> getMessage(ex)).toArray(String[]::new);
 
 
         return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR, message);
@@ -92,7 +92,7 @@ public class ExceptionInfoHandler {
         return new ErrorInfo(req.getRequestURL(), errorType, message.length != 0 ? message : new String[]{ValidationUtil.getMessage(rootCause)});
     }
 
-    public String getMassage(FieldError error) {
+    private String getMessage(FieldError error) {
         StringJoiner joiner = new StringJoiner("-");
         joiner.add(error.getField());
         joiner.add(error.getDefaultMessage());
