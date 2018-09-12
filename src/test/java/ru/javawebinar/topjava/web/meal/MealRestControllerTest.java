@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.util.MealsUtil;
-import ru.javawebinar.topjava.util.exception.ErrorType;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
@@ -146,7 +145,7 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isUnprocessableEntity())
                 .andDo(print())
                 .andExpect(content().string("{\"url\":\"http://localhost/rest/profile/meals/"
-                +"\",\"type\":\"VALIDATION_ERROR\",\"detail\":[\"description-размер должен быть между 2 и 120\",\"description-не может быть пусто\"]}"));
+                        + "\",\"type\":\"VALIDATION_ERROR\",\"detail\":[\"description-размер должен быть между 2 и 120\",\"description-не может быть пусто\"]}"));
     }
 
     @Test
@@ -160,8 +159,9 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(content().string("{\"url\":\"http://localhost/rest/profile/meals/100002"
-                        +"\",\"type\":\"VALIDATION_ERROR\",\"detail\":[\"description-размер должен быть между 2 и 120\",\"description-не может быть пусто\"]}"));
+                        + "\",\"type\":\"VALIDATION_ERROR\",\"detail\":[\"description-размер должен быть между 2 и 120\",\"description-не может быть пусто\"]}"));
     }
+
     @Test
     @Transactional(propagation = Propagation.NEVER)
     public void testUpdateDuplicate() throws Exception {
@@ -174,7 +174,7 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isConflict())
                 .andExpect(content().string("{\"url\":\"http://localhost/rest/profile/meals/100002"
-                        +"\",\"type\":\"DATA_ERROR\",\"detail\":[\"Date already exist.\"]}"));
+                        + "\",\"type\":\"DATA_ERROR\",\"detail\":[\"Date already exist.\"]}"));
     }
 
     @Test
@@ -188,7 +188,7 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isConflict())
                 .andExpect(content().string("{\"url\":\"http://localhost/rest/profile/meals/"
-                        +"\",\"type\":\"DATA_ERROR\",\"detail\":[\"Date already exist.\"]}"));
+                        + "\",\"type\":\"DATA_ERROR\",\"detail\":[\"Date already exist.\"]}"));
 
     }
 }

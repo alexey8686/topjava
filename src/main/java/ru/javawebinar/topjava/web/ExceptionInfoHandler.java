@@ -49,12 +49,11 @@ public class ExceptionInfoHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ErrorInfo conflict(HttpServletRequest req, DataIntegrityViolationException e) {
         String msg = ValidationUtil.getRootCause(e).getMessage();
-        if(msg!=null){
-            if (msg.toLowerCase().contains("users_unique_email_idx")){
-                return logAndGetErrorInfo(req, e, true, DATA_ERROR,messageSource.getMessage("exception.user.email",null,req.getLocale()));
-            }
-            else if(msg.toLowerCase().contains("meals_unique_user_datetime_idx")){
-                return logAndGetErrorInfo(req, e, true, DATA_ERROR,messageSource.getMessage("exception.meal.date",null,req.getLocale()));
+        if (msg != null) {
+            if (msg.toLowerCase().contains("users_unique_email_idx")) {
+                return logAndGetErrorInfo(req, e, true, DATA_ERROR, messageSource.getMessage("exception.user.email", null, req.getLocale()));
+            } else if (msg.toLowerCase().contains("meals_unique_user_datetime_idx")) {
+                return logAndGetErrorInfo(req, e, true, DATA_ERROR, messageSource.getMessage("exception.meal.date", null, req.getLocale()));
             }
         }
         return logAndGetErrorInfo(req, e, true, DATA_ERROR);
@@ -63,11 +62,11 @@ public class ExceptionInfoHandler {
     @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)  // 422
     @ExceptionHandler({BindException.class, MethodArgumentNotValidException.class})
     public ErrorInfo bindValidationError(HttpServletRequest req, Exception e) {
-        BindingResult bindingResult = e instanceof BindException ?((BindException)e).getBindingResult():((MethodArgumentNotValidException)e).getBindingResult();
-       String [] message =  bindingResult.getFieldErrors().stream().map(ex->getMassage(ex)).toArray(String[]::new);
+        BindingResult bindingResult = e instanceof BindException ? ((BindException) e).getBindingResult() : ((MethodArgumentNotValidException) e).getBindingResult();
+        String[] message = bindingResult.getFieldErrors().stream().map(ex -> getMassage(ex)).toArray(String[]::new);
 
 
-        return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR,message);
+        return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR, message);
     }
 
     @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)  // 422
@@ -82,18 +81,18 @@ public class ExceptionInfoHandler {
         return logAndGetErrorInfo(req, e, true, APP_ERROR);
     }
 
-//    https://stackoverflow.com/questions/538870/should-private-helper-methods-be-static-if-they-can-be-static
-    private static ErrorInfo logAndGetErrorInfo(HttpServletRequest req, Exception e, boolean logException, ErrorType errorType,String... message) {
+    //    https://stackoverflow.com/questions/538870/should-private-helper-methods-be-static-if-they-can-be-static
+    private static ErrorInfo logAndGetErrorInfo(HttpServletRequest req, Exception e, boolean logException, ErrorType errorType, String... message) {
         Throwable rootCause = ValidationUtil.getRootCause(e);
         if (logException) {
             log.error(errorType + " at request " + req.getRequestURL(), rootCause);
         } else {
             log.warn("{} at request  {}: {}", errorType, req.getRequestURL(), rootCause.toString());
         }
-        return new ErrorInfo(req.getRequestURL(), errorType, message.length!=0?message:new String[]{ValidationUtil.getMessage(rootCause)});
+        return new ErrorInfo(req.getRequestURL(), errorType, message.length != 0 ? message : new String[]{ValidationUtil.getMessage(rootCause)});
     }
 
-    public String getMassage (FieldError error){
+    public String getMassage(FieldError error) {
         StringJoiner joiner = new StringJoiner("-");
         joiner.add(error.getField());
         joiner.add(error.getDefaultMessage());

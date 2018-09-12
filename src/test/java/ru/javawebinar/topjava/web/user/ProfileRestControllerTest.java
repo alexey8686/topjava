@@ -69,7 +69,7 @@ class ProfileRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(content().string("{\"url\":\"http://localhost/rest/profile"
-                        +"\",\"type\":\"VALIDATION_ERROR\",\"detail\":[\"name-не может быть пусто\"]}"))
+                        + "\",\"type\":\"VALIDATION_ERROR\",\"detail\":[\"name-не может быть пусто\"]}"))
                 .andDo(print());
     }
 
@@ -83,7 +83,7 @@ class ProfileRestControllerTest extends AbstractControllerTest {
                 .content(JsonUtil.writeValue(updatedTo)))
                 .andExpect(status().isConflict())
                 .andExpect(content().string("{\"url\":\"http://localhost/rest/profile"
-                        +"\",\"type\":\"DATA_ERROR\",\"detail\":[\"Already exist with same email.\"]}"))
+                        + "\",\"type\":\"DATA_ERROR\",\"detail\":[\"Already exist with same email.\"]}"))
                 .andDo(print());
     }
 

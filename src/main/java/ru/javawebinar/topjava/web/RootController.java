@@ -13,7 +13,6 @@ import ru.javawebinar.topjava.util.UserUtil;
 import ru.javawebinar.topjava.web.user.AbstractUserController;
 
 import javax.validation.Valid;
-import javax.validation.ValidationException;
 
 @Controller
 public class RootController extends AbstractUserController {
@@ -55,11 +54,10 @@ public class RootController extends AbstractUserController {
             SecurityUtil.get().update(userTo);
             status.setComplete();
             return "redirect:meals";
-            }
-            catch (DataIntegrityViolationException e) {
-            result.rejectValue("email","exception.user.email");
+        } catch (DataIntegrityViolationException e) {
+            result.rejectValue("email", "exception.user.email");
             return "profile";
-            }
+        }
 
     }
 
@@ -80,10 +78,9 @@ public class RootController extends AbstractUserController {
             super.create(UserUtil.createNewFromTo(userTo));
             status.setComplete();
             return "redirect:login?message=app.registered&username=" + userTo.getEmail();
-        }
-        catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
 
-            result.rejectValue("email","exception.user.email");
+            result.rejectValue("email", "exception.user.email");
             return "profile";
         }
     }

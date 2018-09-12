@@ -133,7 +133,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .content(JsonUtil.writeValue(expected)))
                 .andExpect(status().isUnprocessableEntity())
                 .andDo(print()).andExpect(content().string("{\"url\":\"http://localhost/rest/admin/users/"
-                        +"\",\"type\":\"VALIDATION_ERROR\",\"detail\":[\"password-не может быть пусто\",\"email-не может быть пусто\",\"name-не может быть пусто\"]}"));
+                        + "\",\"type\":\"VALIDATION_ERROR\",\"detail\":[\"password-не может быть пусто\",\"email-не может быть пусто\",\"name-не может быть пусто\"]}"));
     }
 
     @Test
@@ -146,7 +146,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .content(JsonUtil.writeValue(updated)))
                 .andExpect(status().isUnprocessableEntity())
                 .andDo(print()).andExpect(content().string("{\"url\":\"http://localhost/rest/admin/users/100000"
-                +"\",\"type\":\"VALIDATION_ERROR\",\"detail\":[\"name-не может быть пусто\",\"name-размер должен быть между 2 и 100\",\"password-не может быть пусто\"]}"));
+                + "\",\"type\":\"VALIDATION_ERROR\",\"detail\":[\"name-не может быть пусто\",\"name-размер должен быть между 2 и 100\",\"password-не может быть пусто\"]}"));
     }
 
     @Test
@@ -160,7 +160,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .content(jsonWithPassword(updated, "password")))
                 .andExpect(status().isConflict())
                 .andDo(print()).andExpect(content().string("{\"url\":\"http://localhost/rest/admin/users/100000"
-                +"\",\"type\":\"DATA_ERROR\",\"detail\":[\"Already exist with same email.\"]}"));
+                + "\",\"type\":\"DATA_ERROR\",\"detail\":[\"Already exist with same email.\"]}"));
     }
 
     @Test
@@ -172,7 +172,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(ADMIN))
                 .content(jsonWithPassword(expected, "newPass")))
                 .andExpect(status().isConflict()).andExpect(content().string("{\"url\":\"http://localhost/rest/admin/users/"
-                +"\",\"type\":\"DATA_ERROR\",\"detail\":[\"Already exist with same email.\"]}"));
+                + "\",\"type\":\"DATA_ERROR\",\"detail\":[\"Already exist with same email.\"]}"));
 
 
     }
