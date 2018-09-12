@@ -84,7 +84,7 @@ public class RootController extends AbstractUserController {
         catch (DataIntegrityViolationException e){
 
             result.rejectValue("email","exception.user.email");
-            return "register";
+            return "profile";
         }
     }
 }

@@ -2,6 +2,8 @@ package ru.javawebinar.topjava.web.user;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.TestUtil;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.to.UserTo;
@@ -56,4 +58,33 @@ class ProfileRestControllerTest extends AbstractControllerTest {
 
         assertMatch(userService.getByEmail("newemail@ya.ru"), UserUtil.updateFromTo(new User(USER), updatedTo));
     }
+
+    @Test
+    public void testUpdateInvalid() throws Exception {
+        UserTo updatedTo = new UserTo(null, null, "user2@mail.ru", "password", 1500);
+
+        mockMvc.perform(put(REST_URL).contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(USER))
+                .content(JsonUtil.writeValue(updatedTo)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(content().string("{\"url\":\"http://localhost/rest/profile"
+                        +"\",\"type\":\"VALIDATION_ERROR\",\"detail\":[\"name-не может быть пусто\"]}"))
+                .andDo(print());
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.NEVER)
+    public void testDuplicate() throws Exception {
+        UserTo updatedTo = new UserTo(null, "newName", "admin@gmail.com", "newPassword", 1500);
+
+        mockMvc.perform(put(REST_URL).contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(USER))
+                .content(JsonUtil.writeValue(updatedTo)))
+                .andExpect(status().isConflict())
+                .andExpect(content().string("{\"url\":\"http://localhost/rest/profile"
+                        +"\",\"type\":\"DATA_ERROR\",\"detail\":[\"Already exist with same email.\"]}"))
+                .andDo(print());
+    }
+
 }
